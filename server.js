@@ -3,6 +3,7 @@ const express     = require('express');
 const logger      = require('morgan');
 const path        = require('path');
 const bodyParser  = require('body-parser');
+require('dotenv').config();
 
 const app       = express();
 const _port     = process.argv[2]|| process.env.port||3009;
@@ -27,5 +28,5 @@ app.get('/',(req,res)=>{
 
 // turn me on!
 app.listen(_port , ()=>
-  console.log(`server here! listening on`, _port ) 
+  console.log(`server here! listening on`, _port )
 )
