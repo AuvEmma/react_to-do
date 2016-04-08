@@ -15,12 +15,11 @@ const App = React.createClass({
   addTask:function( newTask ) {
     // generate a new timestamp so that we have a unique id for each task
     var timestamp = (new Date()).getTime();
-
+    $.post('/task', newTask).done((data)=>{
+      this.state.tasks=data
+      this.setState({tasks:this.state.tasks})
+    })
     // add new task to state
-    this.state.tasks['task-'+ timestamp] = newTask;
-
-    this.setState({ tasks: this.state.tasks });
-
   },
   toggleTask:function(key){
     this.state.tasks[key].completed = !this.state.tasks[key].completed;
@@ -33,7 +32,7 @@ const App = React.createClass({
   },
   filterNotComplete:function(key){
     return !this.filterComplete(key)
-  }, 
+  },
   renderTask:function(key){
     return (
       <Task key={key} index={key} details={this.state.tasks[key]} toggleTask={this.toggleTask} />
@@ -43,18 +42,19 @@ const App = React.createClass({
   render:function() {
     return (
       <div className="container">
-      
+
         <div className="row">
           <section className="col s12">
-          
+
             {/*to do unfinished tasks*/}
             <section id="todo-display" className="col s7">
               <ul className="collection with-header">
-                <li className="collection-header"><h4>Tasks</h4></li>
+                <li className="collection-header"><h4>Tasks</h4>
                 {/*open tasks here*/}
                 {Object.keys(this.state.tasks)
                   .filter(this.filterNotComplete)
                   .map( this.renderTask )}
+                  </li>
               </ul>
             </section>
 
@@ -97,7 +97,7 @@ const CreateTaskForm = React.createClass({
 
     // add the task to the state
     this.props.addTask(task);
-    
+
     // clear the form
     this.refs.taskForm.reset();
 
@@ -150,8 +150,3 @@ const Task = React.createClass({
 
 
 ReactDOM.render(<App />, document.querySelector('#container'))
-
-
-
-
-
